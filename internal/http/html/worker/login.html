@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Login</title>
+    <style>
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .response-message {
+            margin-top: 20px;
+        }
+        .response-message.success {
+            color: green;
+        }
+        .response-message.error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center">Worker Login</h2>
+    <form id="loginForm" action="/worker/login" method="POST">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required minlength="8">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+    </form>
+
+    <!-- Display response message here -->
+    <div id="message" class="response-message"></div>
+</div>
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", async function(event){
+        event.preventDefault();
+
+        const formData = {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+        };
+
+        const response = await fetch("/worker/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        try {
+            if (response.ok) {
+                window.location.href = "/worker/profile";
+            } else {
+                document.getElementById("message").innerHTML =
+                    `<div class="error">Error: ${result.message || 'Login error occurred'}</div>`;
+            }
+        }catch (error) {
+            document.getElementById("message").innerHTML =
+                `<div class="error">An unexpected error occurred.</div>`;
+        }
+    })
+</script>
+
+</body>
+</html>
+

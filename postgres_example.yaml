@@ -1,0 +1,13 @@
+hostName: localhost
+httpConf:
+  listenAddr: "localhost:1234"
+  certHostname: "localhost"
+  timeOut: "4s"
+  idleTimeout: "60s"
+  certFile: "../../server.crt"
+  keyFile: "../../server.key"
+  jwtSecret: "your-jwt-secret"
+dbConf:
+  dbType: "postgres"
+  dbURL: "your dbURL"
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Profile</title>
+    <style>
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+        }
+        .profile-info {
+            margin-bottom: 15px;
+        }
+        .profile-info label {
+            font-weight: bold;
+        }
+        .profile-info .value {
+            font-size: 1.2em;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+        .back-btn {
+            margin-top: 20px;
+        }
+        #logoutMessage {
+            margin-top: 15px;
+            padding: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center">Worker Profile</h2>
+
+    <!-- Якщо є помилка (неавторизований) відображаємо повідомлення -->
+    {{if .Error}}
+    <div class="error-message">{{.Error}}</div>
+    <button class="btn btn-secondary back-btn" onclick="window.location.href='/worker/login'">Log in</button>
+    {{else}}
+    <!-- Профіль користувача -->
+    <div class="profile-info">
+        <label>Name</label>
+        <div class="value">{{.Name}}</div>
+    </div>
+
+    <div class="profile-info">
+        <label>Email</label>
+        <div class="value">{{.Email}}</div>
+    </div>
+
+    <div class="profile-info">
+        <label>Role</label>
+        <div class="value">{{.Role}}</div>
+    </div>
+
+    <div class="profile-info">
+        <label>Account Created On</label>
+        <div class="value">{{.CreatedAt}}</div>
+    </div>
+    {{end}}
+
+    <button id="logoutBtn" class="btn btn-secondary back-btn">Log out</button>
+    <div id="logoutMessage"></div>
+</div>
+
+<script>
+    document.getElementById('logoutBtn').addEventListener('click', async function () {
+        const response = await fetch('/worker/logout', {
+            method: 'GET', // or 'POST' depending on your logout method
+        });
+
+        const result = await response.json();
+
+        const logoutMessage = document.getElementById("logoutMessage");
+
+        if (response.ok) {
+            // Show success message in the div
+            logoutMessage.style.display = "block";
+            logoutMessage.textContent = "Logout successful! You have been logged out.";
+            logoutMessage.style.color = "green";
+
+            // Optionally, redirect after a short delay
+            setTimeout(function() {
+                window.location.href = '/'; // Redirect to home or login page
+            }, 2000); // Redirect after 2 seconds
+        } else {
+            // Show error message
+            logoutMessage.style.display = "block";
+            logoutMessage.textContent = "Error logging out. Please try again.";
+            logoutMessage.style.color = "red";
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Registration</title>
+    <style>
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .response-message {
+            margin-top: 20px;
+        }
+        .response-message.success {
+            color: green;
+        }
+        .response-message.error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center">Worker Registration</h2>
+    <form id="registrationForm">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required minlength="8">
+            <small class="form-text text-muted">Must be at least 8 characters.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role</label>
+            <input type="text" class="form-control" id="role" name="role" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </form>
+
+    <!-- Display JSON response here -->
+    <div id="message" class="response-message"></div>
+</div>
+
+<script>
+    document.getElementById("registrationForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = {
+            name: document.getElementById("name").value,
+            password: document.getElementById("password").value,
+            email: document.getElementById("email").value,
+            role: document.getElementById("role").value,
+        };
+
+        try {
+            // Send the data to the server as JSON
+            const response = await fetch("/worker/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json(); // Get the JSON response from the server
+
+            // If the response is OK (status 200), display success message
+            if (response.ok) {
+                const workerInfo = JSON.stringify(result.data, null, 2);
+                document.getElementById("message").innerHTML =
+                    `<div class="success">Worker successfully registered!</div>
+                     <pre>${workerInfo}</pre>`; // Display JSON response
+            } else {
+                // Otherwise, display error message
+                document.getElementById("message").innerHTML =
+                    `<div class="error">Error: ${result.message || 'Unknown error occurred'}</div>`;
+            }
+        } catch (error) {
+            document.getElementById("message").innerHTML =
+                `<div class="error">An unexpected error occurred.</div>`;
+        }
+    });
+</script>
+
+</body>
+</html>

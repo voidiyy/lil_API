@@ -1,0 +1,13 @@
+hostName: localhost
+httpConf:
+  listenAddr: "https://localhost:1234"
+  certHostname: "localhost"
+  timeOut: "4s"
+  idleTimeout: "60s"
+  certFile: "../../server.crt"
+  keyFile: "../../server.key"
+  jwtSecret: "your-jwt-secret"
+dbConf:
+  dbType: "mysql"
+  dbURL: "your dbURL (for MySQL)"
+
