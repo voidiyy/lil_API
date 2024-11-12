@@ -10,6 +10,8 @@ This project implements an HTTP server with a REST API that can interact with ei
 - Ability to switch between MySQL and PostgreSQL databases.
 - Use TLS cert&key for HTTPS.
 
+Frontend and JS are very bad, thats just learning of golang API and DB, dont care about visual view
+
 ## Configuration Example:
 
 ```yaml
